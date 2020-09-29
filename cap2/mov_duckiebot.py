@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: cp1252 -*-
 
 """
 Este programa permite mover al Duckiebot dentro del simulador
@@ -25,7 +26,7 @@ parser.add_argument('--frame-skip', default=1, type=int, help='number of frames 
 parser.add_argument('--seed', default=1, type=int, help='seed')
 args = parser.parse_args()
 
-# Definici√≥n del environment
+# DefiniciÛn del environment
 if args.env_name and args.env_name.find('Duckietown') != -1:
     env = DuckietownEnv(
         seed = args.seed,
@@ -45,40 +46,45 @@ env.reset()
 
 while True:
 
-    # Captura la tecla que est√° siendo apretada y almacena su valor en key
+    # Captura la tecla que est· siendo apretada y almacena su valor en key
     key = cv2.waitKey(30)
 
     # Si la tecla es Esc, se sale del loop y termina el programa
     if key == 27:
         break
 
-    # La acci√≥n de Duckiebot consiste en dos valores:
+    # La acciÛn de Duckiebot consiste en dos valores:
     # velocidad lineal y velocidad de giro
-    # En este caso, ambas velocidades son 0 (acci√≥n por defecto)
+    # En este caso, ambas velocidades son 0 (acciÛn por defecto)
     action = np.array([0.0, 0.0])
 
-    # Definir acci√≥n en base a la tecla apretada
+    # Definir acciÛn en base a la tecla apretada
 
     # Esto es avanzar recto hacia adelante al apretar la tecla w
     if key == ord('w'):
         action = np.array([0.44, 0.0])
 
-    ### AGREGAR M√ÅS COMPORTAMIENTOS ###
+    ### AGREGAR M¡S COMPORTAMIENTOS ###
+    if key == ord('a'):
+        action = np.array([0.0, 0.44])
+    if key == ord('s'):
+        action = np.array([-0.44, 0.0])
+    if key == ord('d'):
+        action = np.array([0.0, -0.44])
 
 
-
-    # Se ejecuta la acci√≥n definida anteriormente y se retorna la observaci√≥n (obs),
-    # la evaluaci√≥n (reward), etc
+    # Se ejecuta la acciÛn definida anteriormente y se retorna la observaciÛn (obs),
+    # la evaluaciÛn (reward), etc
     obs, reward, done, info = env.step(action)
     # obs consiste en un imagen de 640 x 480 x 3
 
-    # done significa que el Duckiebot choc√≥ con un objeto o se sali√≥ del camino
+    # done significa que el Duckiebot chocÛ con un objeto o se saliÛ del camino
     if done:
         print('done!')
         # En ese caso se reinicia el simulador
         env.reset()
 
-    # Se muestra en una ventana llamada "patos" la observaci√≥n del simulador
+    # Se muestra en una ventana llamada "patos" la observaciÛn del simulador
     cv2.imshow("patos", cv2.cvtColor(obs, cv2.COLOR_RGB2BGR))
 
 
